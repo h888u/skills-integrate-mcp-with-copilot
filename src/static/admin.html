@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard - Mergington High School</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>Admin Dashboard</h1>
+    <h2>Manage Students & Activities</h2>
+    <a href="/static/index.html">← Back to Main Site</a>
+  </header>
+  <main>
+    <section>
+      <h3>All Activities</h3>
+      <div id="admin-activities-list">
+        <p>Loading activities...</p>
+      </div>
+    </section>
+    <section>
+      <h3>All Students (by activity)</h3>
+      <div id="admin-students-list">
+        <p>Loading students...</p>
+      </div>
+    </section>
+  </main>
+  <script>
+    // Fetch and display activities and students
+    async function fetchAdminData() {
+      const activitiesRes = await fetch('/activities');
+      const activities = await activitiesRes.json();
+      // Activities list
+      const activitiesDiv = document.getElementById('admin-activities-list');
+      activitiesDiv.innerHTML = '';
+      Object.entries(activities).forEach(([name, details]) => {
+        const div = document.createElement('div');
+        div.className = 'activity-card';
+        div.innerHTML = `<h4>${name}</h4><p>${details.description}</p><p><strong>Schedule:</strong> ${details.schedule}</p><p><strong>Max:</strong> ${details.max_participants}</p>`;
+        activitiesDiv.appendChild(div);
+      });
+      // Students list
+      const studentsDiv = document.getElementById('admin-students-list');
+      studentsDiv.innerHTML = '';
+      Object.entries(activities).forEach(([name, details]) => {
+        const div = document.createElement('div');
+        div.className = 'activity-card';
+        div.innerHTML = `<h4>${name}</h4><ul>${details.participants.map(email => `<li>${email}</li>`).join('')}</ul>`;
+        studentsDiv.appendChild(div);
+      });
+    }
+    fetchAdminData();
+  </script>
+</body>
+</html>
