@@ -130,3 +130,8 @@ def unregister_from_activity(activity_name: str, email: str):
     # Remove student
     activity["participants"].remove(email)
     return {"message": f"Unregistered {email} from {activity_name}"}
+
+
+@app.get("/admin")
+def admin_dashboard():
+    return RedirectResponse(url="/static/admin.html")
